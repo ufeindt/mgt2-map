@@ -4,12 +4,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Sector map</title>
+
+  <style>
+    .d3-tip {
+      line-height: 1;
+      /*font-weight: bold;*/
+      padding: 12px;
+      background: #fff;
+      color: #000;
+      border-radius: 5px;
+      border: 2px solid #000;
+      max-width: 500px;
+      padding: 10px;
+    }
+  </style>
 </head>
 <body>
-  
+    <h3>Hover over system for more information</h3>
     <div class="canvas"> </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/world.js"></script>
     <script src="js/map.js"></script>

@@ -127,12 +127,18 @@ class Map {
 
         for (var x = 1; x <= this.props.width; x++) {
             for (var y = 1; y <= this.props.height; y++) {
-                out.push({
+                var tmp = {
                     d: this.hexagonPath(x, y),
                     label: padToTwo(x) + padToTwo(y),
                     labelX: this.hexagonCentreX(x, y) - 0.0*this.hexSideLength,
                     labelY: this.hexagonCentreY(x, y) - 0.65*this.hexSideLength
-                });
+                }; 
+                
+                if (tmp.label in this.props.systems) {
+                    tmp.world = this.props.systems[tmp.label].world;
+                }
+
+                out.push(tmp);
             }
         }
 

@@ -8,7 +8,7 @@ const svg = d3.select('.canvas')
         .attr('height', 1200);
 
 // create margins & dimensions
-const margin = {top: 20, right: 20, bottom: 20, left: 20};
+const margin = {top: 0, right: 20, bottom: 20, left: 20};
 const graphWidth = 600 - margin.left - margin.right;
 const graphHeight = 600 - margin.top - margin.bottom;
 
@@ -27,10 +27,28 @@ const colourDist = d3.scaleOrdinal(d3["schemeSet2"])
 
 //});
 
+const tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .direction('se')
+  .html(d => {
+    let content = '<div><b><u>System Summary</u></b></div>';
+    content += `<div><b>Starport:</b> <span id="starport">${d.world.starport}</span></div>`
+    content += `<div><b>Size:</b> <span id="size">${d.world.size}</span></div>`
+    content += `<div><b>Atmosphere:</b> <span id="atmo">${d.world.atmo}</span></div>`
+    content += `<div><b>Temperature:</b> <span id="temp">${d.world.temp}</span></div>`
+    content += `<div><b>Hydrographics:</b> <span id="hydro">${d.world.hydro}</span></div>`
+    content += `<div><b>Population:</b> <span id="pop">${d.world.pop}</span></div>`
+    content += `<div><b>Government:</b> <span id="gov">${d.world.gov}</span></div>`
+    content += `<div><b>Law Level:</b> <span id="lawlvl">${d.world.lawlvl}</span></div>`
+    content += `<div><b>Tech Level:</b> <span id="tl">${d.world.tl}</span></div>`
+
+    return content;
+  });
+
+graph.call(tip);
+
 map = new Map(8, 10);
 updateMap(map);
-console.log(map.distances);
-console.log(map.routes);
 
 function updateMap(map) {
     gridData = map.makeHexGrid();
@@ -186,6 +204,14 @@ function updateMap(map) {
             .on('mouseout', (d, i, n) => {
                 handleHexMouseOutDistance(d, i, n);
             });
+    } else {
+        graph.selectAll('.grid-hex')
+            .on('mouseover', (d, i, n) => {
+                if ('world' in d) {
+                    tip.show(d, n[i]);   
+                }
+            })
+            .on('mouseout', d => tip.hide());
     }
 }
 

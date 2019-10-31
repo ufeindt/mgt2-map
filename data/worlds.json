@@ -1,0 +1,373 @@
+{
+    "size": {
+	"0": {"d": "less than 1,000 km", "g": "Negligible"},
+	"1": {"d": "1,600 km", "g": "0.05 g"},
+	"2": {"d": "3,200 km", "g": "0.15 g"},
+	"3": {"d": "4,800 km", "g": "0.25 g"},
+	"4": {"d": "6,400 km", "g": "0.35 g"},
+	"5": {"d": "8,000 km", "g": "0.45 g"},
+	"6": {"d": "9,600 km", "g": "0.7 g"},
+	"7": {"d": "11,200 km", "g": "0.9 g"},
+	"8": {"d": "12,800 km", "g": "1.0 g"},
+	"9": {"d": "14,400 km", "g": "1.25 g"},
+	"A": {"d": "16,00 km", "g": "1.4 g"}
+    },
+    "atmo": {
+	"0": {"comp": "None", "p": "0.00", "gear": "Vacc Suit", "tl": 8},
+	"1": {"comp": "Trace", "p": "0.001 to 0.09", "gear": "Vacc Suit", "tl": 8},
+	"2": {"comp": "Very Thin, Tainted", "p": "0.1 to 0.42", "gear": "Respirator, Filter", "tl": 5},
+	"3": {"comp": "Very Thin", "p": "0.1 to 0.42", "gear": "Respirator", "tl": 5},
+	"4": {"comp": "Thin, Tainted", "p": "0.43 to 0.7", "gear": "Filter", "tl": 3},
+	"5": {"comp": "Thin", "p": "0.43 to 0.7", "gear": "", "tl": 0},
+	"6": {"comp": "Standard", "p": "0.71 to 1.49", "gear": "", "tl": 0},
+	"7": {"comp": "Standard, Tainted", "p": "0.71 to 1.49", "gear": "Filter", "tl": 3},
+	"8": {"comp": "Dense", "p": "1.5 to 2.49", "gear": "", "tl": 0},
+	"9": {"comp": "Dense, Tainted", "p": "1.5 to 2.49", "gear": "Filter", "tl": 3},
+	"A": {"comp": "Exotic", "p": "Varies", "gear": "Air Supply", "tl": 8},
+	"B": {"comp": "Corrosive", "p": "Varies", "gear": "Vacc Suit", "tl": 9},
+	"C": {"comp": "Insidious", "p": "Varies", "gear": "Vacc Suit", "tl": 10},
+	"D": {"comp": "Very Dense", "p": "2.5 or higher", "gear": "", "tl": 5},
+	"E": {"comp": "Low", "p": "0.5 or lower", "gear": "", "tl": 5},
+	"F": {"comp": "Unusal", "p": "Varies", "gear": "Varies", "tl": 8}
+    },
+    "hzdm": {
+	"-4": "Cold edge of Habitable Zone",
+	"-3": "Cold edge of Habitable Zone",
+	"-2": "Cold edge of Habitable Zone",
+	"-1": "Centre of Habitable Zone",
+	"0": "Centre edge of Habitable Zone",
+	"+1": "Center edge of Habitable Zone",
+	"+2": "Hot edge of Habitable Zone",
+	"+3": "Hot edge of Habitable Zone",
+	"+4": "Hot edge of Habitable Zone"
+    },
+    "temp": {
+	"0": {
+	    "type": "Frozen",
+	    "temp": "-51&deg; or colder",
+	    "desc": "Frozen world. No liquid water, very dry atmosphere."
+	}, 
+	"1": {
+	    "type": "Cold",
+	    "temp": "-51&deg; to 0&deg;",
+	    "desc": "Icy world. Little liquid water, extensive ice caps, few clouds."
+	}, 
+	"2": {
+	    "type": "Temperate",
+	    "temp": "0&deg; to 30&deg;",
+	    "desc": "Temperate world. Earth-like. Liquid & vaporised water are common, moderate ice caps."
+	}, 
+	"3": {
+	    "type": "Hot",
+	    "temp": "30&deg; to 80&deg;",
+	    "desc": "Hot world. Small or no ice caps, little liquid water. Most water in the form of clouds."
+	}, 
+	"4": {
+	    "type": "Boling",
+	    "temp": "80&deg; or hotter",
+	    "desc": "Boiling world. No more ice caps, little liquid water."
+	}
+    },
+    "hydro": {
+	"0" : {"percent": "0&percnt;-5&percnt;", "desc": "Desert world"},
+	"1" : {"percent": "5&percnt;-15&percnt;", "desc": "Dry world"},
+	"2" : {"percent": "15&percnt;-25&percnt;", "desc": "A few small seas"},
+	"3" : {"percent": "25&percnt;-35&percnt;", "desc": "Small seas and oceans"},
+	"4" : {"percent": "35&percnt;-45&percnt;", "desc": "Wet world"},
+	"5" : {"percent": "45&percnt;-55&percnt;", "desc": "Large oceans"},
+	"6" : {"percent": "55&percnt;-65&percnt;", "desc": "Large oceans"},
+	"7" : {"percent": "65&percnt;-75&percnt;", "desc": "Earth-like world"},
+	"8" : {"percent": "75&percnt;-85&percnt;", "desc": "Water world"},
+	"9" : {"percent": "85&percnt;-95&percnt;", "desc": "Only a few small islands and archipelagos"},
+	"A" : {"percent": "95&percnt;-100&percnt;", "desc": "Almost entirely water"}
+    },
+    "pop": {
+	"0": {"range": "0", "desc": "Uninhabited"},
+	"1": {"range": "1+", "desc": "A tiny farmstead or a single family"},
+	"2": {"range": "10+", "desc": "A village"},
+	"3": {"range": "100+", "desc": "A village"},
+	"4": {"range": "1,000+", "desc": "Small town"},
+	"5": {"range": "10,000+", "desc": "Average city"},
+	"6": {"range": "100,000+", "desc": "Average City"},
+	"7": {"range": "1,000,000+", "desc": "Large city"},
+	"8": {"range": "10,000,000+", "desc": "Megalopolis"},
+	"9": {"range": "100,000,000+", "desc": "Present day Earth"},
+	"A": {"range": "1,000,000,000+", "desc": "Present day Earth"},
+	"B": {"range": "10,000,000,000+", "desc": "Incredibly crowded world"},
+	"C": {"range": "100,000,000,000+", "desc": "World-city"}
+    },
+    "gov": {
+	"0": {
+	    "type": "None",
+	    "desc": "No government structure. In many cases,family bonds predominate",
+	    "ex": "Family, Clan, Anarchy",
+	    "contraband": "None"
+	},
+	"1": {
+	    "type": "Company/Corporation",
+	    "desc": "Ruling functions are assumed by a company managerial elite, and most citizenry are company employees or dependants",
+	    "ex": "Corporate outpost, asteroid mine, feudal domain",
+	    "contraband": "Weapons, Drugs, Travellers"
+	},
+	"2": {
+	    "type": "Participating Democracy",
+	    "desc": "Ruling functions are reached by the advice and consent of the citizenry directly",
+	    "ex": "Collective, tribal council, commlinked consensus",
+	    "contraband": "Drugs"
+	},
+	"3": {
+	    "type": "Self-Perpetuating Oligarchy",
+	    "desc": "Ruling functions are performed by a restricted minority, with little or no input from the mass of citizenry",
+	    "ex": "Pltocracy, hereditary ruling caste",
+	    "contraband": "Technology, Weapons, Travellers"
+	},
+	"4": {
+	    "type": "Representative Democracy",
+	    "desc": "Ruling functions are performed by elected, representatives",
+	    "ex": "Republic, democracy",
+	    "contraband": "Drugs, Weapons, Psionics"
+	},
+	"5": {
+	    "type": "Feudal Technocracy",
+	    "desc": "Ruling functions are performed by specific individuals for persons who agree to be ruled by them. Relationships are based on the performance of technical activities  which are mutually beneficial",
+	    "ex": " Those with access to higher technology tend to have higher social status",
+	    "contraband": "Technology, Weapons, Computers"
+	},
+	"6": {
+	    "type": "Captive Government",
+	    "desc": "Ruling functions are performed by an imposed leadership answerable to an outside group",
+	    "ex": "A colony or conquered area",
+	    "contraband": "Weapons, Technology, Travellers"
+	},
+	"7": {
+	    "type": "Balkanisation",
+	    "desc": "No central authority exists; rival governments complete for control. Law level refers to the government nearest the starport",
+	    "ex": "Multiple governments, civil war",
+	    "contraband": "Varies"
+	},
+	"8": {
+	    "type": "Civil Service Bureaucracy",
+	    "desc": "Ruling functions are performed by government agencies employing individuals selected for their expertise",
+	    "ex": "Technocracy, Communism",
+	    "contraband": "Drugs, Weapons"
+	},
+	"9": {
+	    "type": "Impersonal Bureaucracy",
+	    "desc": "Ruling functions are performed by agencies which have become insulated from the governed citizens",
+	    "ex": "Entrenched castes of bureaucrats, decaying empire",
+	    "contraband": "Technology, Weapons, Drugs, Travellers, Psionics"
+	},
+	"A": {
+	    "type": "Charismatic Dictator",
+	    "desc": "Ruling functions are performed by agencies directed by a single leader who enjoys the overwhelming confidence of the citizens",
+	    "ex": "Revolutionary leader, messiah, emperor",
+	    "contraband": "None"
+	},
+	"B": {
+	    "type": "Non-Charismatic Leader",
+	    "desc": "A previous charismatic dictator has been replaced by a leader through normal channels",
+	    "ex": "Military dictatorship, hereditary kingship",
+	    "contraband": "Weapons, Technology, Computers"
+	},
+	"C": {
+	    "type": "Charismatic Oligarchy",
+	    "desc": "Ruling functions are performed by a select group of members of an organisation or class which enjoys the overwhelming confidence of the citizenry",
+	    "ex": "Junta, revolutionary council",
+	    "contraband": "Weapons"
+	},
+	"D": {
+	    "type": "Religious Dictatorship",
+	    "desc": "Ruling functions are performed by a religious organisation without regard to the specific individual needs of the citizenry",
+	    "ex": "Cult, transcendent philosophy, psionic group mind",
+	    "contraband": "Varies"
+	},
+	"E": {
+	    "type": "Religious Autocracy",
+	    "desc": "Government by a single religious leader having absolute power over the citizenry",
+	    "ex": "Messiah",
+	    "contraband": "Varies"
+	},
+	"F": {
+	    "type": "Totalitarian Oligarchy",
+	    "desc": "Government by an all-powerful minority which maintains absolute control through widespread coercion and oppresion",
+	    "ex": "World church, Ruthless corporation",
+	    "contraband": "Varies"
+	}
+    },
+    "factions": {
+	"0": {"type": "Obscure group", "desc": "few have heard of them, no popular support"},
+	"1": {"type": "Fringe group", "desc": "few supporters"},
+	"2": {"type": "Minor group", "desc": "some supporters"},
+	"3": {"type": "Notable group", "desc": "significant support, well known"},
+	"4": {"type": "Significant", "desc": "nearly as powerful as government"},
+	"5": {"type": "Overwhelming popular support", "desc": "more powerful than government"}
+    },
+    "cultural": {
+	"11": {"name": "Sexist", "desc": "one gender is considered subservient or inferior to the other."},
+	"12": {"name": "Religious", "desc": "culture is heavily influenced by a religion or belief systems, possibly one unique to this world."},
+	"13": {"name": "Artistic", "desc": "art and culture are highly prized. Aesthetic design is important in all artefacts produced on world."},
+	"14": {"name": "Ritualised", "desc": "social interaction and trade is highly formalised. Politeness and adherence to traditional forms is considered very important."},
+	"15": {"name": "Conservative", "desc": "the culture resists change and outside influences."},
+	"16": {"name": "Xenophobic", "desc": "the culture distrusts outsiders and alien influences. Offworlders will face considerable prejudice."},
+	"21": {"name": "Taboo", "desc": "a particular topic is forbidden and cannot be discussed. Travellers who unwittingly mention this topic will be ostracised."},
+	"22": {"name": "Deceptive", "desc": "trickery and equivocation are considered acceptable. Honesty is a sign of weakness."},
+	"23": {"name": "Liberal", "desc": "the culture welcomes change and offworld influence. Travellers who bring new and strange ideas will be welcomed."},
+	"24": {"name": "Honourable", "desc": "one’s word is one’s bond in the culture. Lying is both rare and despised."},
+	"25": {"name": "Influenced", "desc": "the culture is heavily influenced by another, neighbouring world. Roll again for a cultural quirk that has been inherited from the culture."},
+	"26": {"name": "Fusion", "desc": "the culture is a merger of two distinct cultures. Roll again twice to determine the quirks inherited from these cultures. If the quirks are incompatible, then the culture is likely divided."},
+	"31": {"name": "Barbaric", "desc": "physical strength and combat prowess are highly valued in the culture. Travellers may be challenged to a fight, or dismissed if they seem incapable of defending themselves. Sports tend towards the bloody and violent."},
+	"32": {"name": "Remnant", "desc": "the culture is a surviving remnant of a once-great and vibrant civilisation, clinging to its former glory. The world is filled with crumbling ruins, and every story revolves around the good old days."},
+	"33": {"name": "Degenerate", "desc": "the culture is falling apart and is on the brink of war or economic collapse. Violent protests are common, and the social order is decaying."},
+	"34": {"name": "Progressive", "desc": "the culture is expanding and vibrant. Fortunes are being made in trade; science is forging bravely ahead."},
+	"35": {"name": "Recovering", "desc": "a recent trauma, such as a plague, war, disaster or despotic regime has left scars on the culture."},
+	"36": {"name": "Nexus", "desc": "members of many different cultures and species visit here."},
+	"41": {"name": "Tourist Attraction", "desc": "some aspect of the culture or the planet draws visitors from all over charted space."},
+	"42": {"name": "Violent", "desc": "physical conflict is common, taking the form of duels, brawls or other contests. Trial by combat is a part of their judicial system."},
+	"43": {"name": "Peaceful", "desc": "physical conflict is almost unheard-of. The culture produces few soldiers, and diplomacy reigns supreme. Forceful Travellers will be ostracised."},
+	"44": {"name": "Obsessed", "desc": "everyone is obsessed with or addicted to a substance, personality, act or item. This monomania pervades every aspect of the culture."},
+	"45": {"name": "Fashion", "desc": "fine clothing and decoration are considered vitally important in the culture. Underdressed Travellers have no standing here."},
+	"46": {"name": "At war", "desc": "the culture is at war, either with another planet or polity, or is troubled by terrorists or rebels."},
+	"51": {"name": "Unusual Custom: Offworlders", "desc": "space travellers hold a unique position in the culture’s mythology or beliefs, and travellers will be expected to live up to these myths."},
+	"52": {"name": "Unusual Custom: Starport", "desc": "the planet’s starport is more than a commercial centre; it might be a religious temple, or be seen as highly controversial and surrounded by protestors."},
+	"53": {"name": "Unusual Custom: Media", "desc": "news agencies and telecommunications channels are especially strange here. Getting accurate information may be difficult."},
+	"54": {"name": "Unusual Customs: Technology", "desc": "the culture interacts with technology in an unusual way. Telecommunications might be banned, robots might have civil rights, or cyborgs might be property."},
+	"55": {"name": "Unusual Customs: Lifecycle", "desc": "there might be a mandatory age of termination, or anagathics might be widely used. Family units might be different, with children being raised by the state or banned in favour of cloning."},
+	"56": {"name": "Unusual Customs: Social Standings", "desc": "the culture has a distinct caste system. Travellers of a low social standing who do not behave appropriately will face punishment."},
+	"61": {"name": "Unusual Customs: Trade", "desc": "the culture has an odd attitude towards some aspect of commerce, which may interfere with trade at the spaceport. For example, merchants might expect a gift as part of a deal, or some goods may only be handled by certain families."},
+	"62": {"name": "Unusual Customs: Nobility", "desc": "those of high social standing have a strange custom associated with them; perhaps nobles are blinded, or must live in gilded cages, or only serve for a single year before being exiled."},
+	"63": {"name": "Unusual Customs: Sex", "desc": "he culture has an unusual attitude towards intercourse and reproduction. Perhaps cloning is used instead, or sex is used to seal commercial deals."},
+	"64": {"name": "Unusual Customs: Eating", "desc": "food and drink occupies an unusual place in the culture. Perhaps eating is a private affair, or banquets and formal dinners are seen as the highest form of politeness."},
+	"65": {"name": "Unusual Customs: Travel", "desc": "travellers may be distrusted or feted, or perhaps the culture frowns on those who leave their homes."},
+	"66": {"name": "Unusual Custom: Conspiracy", "desc": "something strange is going on. The government is being subverted by another group or agency."}	
+    },
+    "lawlvl": {
+	"0": {"weapons": "No restrictions – heavy armour and a handy weapon recommended...", "armor": ""},
+	"1": {"weapons": "Poison gas, explosives, undetectable weapons, WMD", "armor": "Battle dress"},
+	"2": {"weapons": "Portable energy and laser Combat armour weapons", "armor": "Combat armour"},
+	"3": {"weapons": "Military weapons", "armor": "Flak"},
+	"4": {"weapons": "Light assault weapons and submachine guns", "armor": "Cloth"},
+	"5": {"weapons": "Personal concealable weapons", "armor": "Mesh"},
+	"6": {"weapons": "All firearms except shotguns & stunners; carrying weapons discouraged", "armor": ""},
+	"7": {"weapons": "Shotguns", "armor": ""},
+	"8": {"weapons": "All bladed weapons, stunners", "armor": "All visible armour"},
+	"9": {"weapons": "All weapons", "armor": "All armour"}
+    },
+    "starport": {
+	"A": {"qual": "Excellent", "fuel": "Refined", "fac": "Shipyard (all), Repair"},
+	"B": {"qual": "Good", "fuel": "Refined", "fac": "Shipyard (spacecraft), Repair"},
+	"C": {"qual": "Routine", "fuel": "Unrefined", "fac": "Shipyard (small craft), Repair"},
+	"D": {"qual": "Poor", "fuel": "Unrefined", "fac": "Limited Repair"},
+	"E": {"qual": "Frontier", "fuel": "None", "fac": "None"},
+	"X": {"qual": "No Starport", "fuel": "None", "fac": "None"}
+    },
+    "tl": {
+	"0": {"type": "Primitive", "desc": "No technology. TL 0 species have only discovered the simplest tools and principles, and are on a par with Earth’s Stone Age."},
+	"1": {"type": "Primitive", "desc": "Roughly on a par with Bronze or Iron age technology. TL 1 science is mostly superstition, but they can manufacture weapons and work metals."},
+	"2": {"type": "Primitive", "desc": "Renaissance technology. TL 2 brings with it a greater understanding of chemistry, physics, biology and astronomy as well as the scientific method."},
+	"3": {"type": "Primitive", "desc": "The advances of TL 2 are now applied, bringing the germ of industrial revolution and steam power. Primitive firearms now dominate the battlefield. This is roughly comparable to the early 19th century."},
+	"4": {"type": "Industrial", "desc": "The transition to industrial revolution is complete, bringing plastics, radio and other such inventions. Roughly comparable to the late 19th/early 20th century."},
+	"5": {"type": "Industrial", "desc": "TL 5 brings widespread electrification, tele-communications and internal combustion. At the high end of the TL, atomics and primitive computing appear. Roughly on a par with the mid–20th century."},
+	"6": {"type": "Industrial", "desc": "TL 6 brings the development of fission power and more advanced computing. Advances in materials technology and rocketry bring about the dawn of the space age."},
+	"7": {"type": "Pre-Stellar", "desc": "A pre-stellar society can reach orbit reliably and has telecommunications satellites. Computers become common. At the time of writing, humanity is currently somewhere between TL 7 and TL 8."},
+	"8": {"type": "Pre-Stellar", "desc": "At TL 8, it is possible to reach other worlds in the same system, although terraforming or full colonisation are not within the culture’s capacity. Permanent space habitats become possible. Fusion power becomes commercially viable."},
+	"9": {"type": "Pre-Stellar", "desc": "The defining element of TL 9 is the development of gravity manipulation, which makes space travel vastly safer and faster. This research leads to development of the jump drive, which occurs near the end of this Tech Level. TL 9 cultures can colonise other worlds, although travelling to a colony is often a one-way trip."},
+	"A": {"type": "Early Stellar", "desc": "With the advent of commonly available jump drives, nearby systems are opened up. Orbital habitats and factories become common. Interstellar travel and trade lead to an economic boom. Colonies become much more viable. "},
+	"B": {"type": "Early Stellar", "desc": "The first true artificial intelligences become possible, as computers are able to model synaptic networks. Grav-supported structures reach to the heavens. Jump 2 travel becomes possible, allowing easier travel beyond the one jump stellar mains."},
+	"C": {"type": "Average Stellar", "desc": "Weather control revolutionises terraforming and agriculture. Man-portable plasma weapons and carrier-mounted fusion guns make the battlefield untenable for unarmoured combatants. Jump 3 travel is developed."},
+	"D": {"type": "Average Stellar", "desc": "The battle dress appears on the battlefield in response to the new weapons. Cloning of body parts becomes easy. Advances in hull design and thruster plates means that spacecraft can easily go underwater. Jump 4 travel."},
+	"E": {"type": "Average Stellar", "desc": "Fusion weapons become man-portable. Flying cities appear. Jump 5 travel."},
+	"F": {"type": "High Stellar", "desc": "Black globe generators suggest a new direction for defensive technologies, while the development of synthetic anagathics means that the human lifespan is now vastly increased. Jump 6 travel."}
+    },
+    "tc": {
+	"Ag": {
+	    "name": "Agricultural",
+	    "req": [["atmo", [4, 5, 6, 7, 8, 9]], ["hydro", [4, 5, 6, 7, 8]], ["pop", [5, 6, 7]]],
+	    "desc": "Dedicated to farming and food production. Often, they are divided into vast semi-feudal estates."
+	},
+	"As": {
+	    "name": "Asteroid",
+	    "req": [["size", [0]], ["atmo", [0]], ["hydro", [0]]],
+	    "desc": "Usually mining colonies, but can also be orbital factories or colonies."
+	},
+	"Ba": {
+	    "name": "Barren",
+	    "req": [["pop", [0]], ["gov", [0]], ["lawlvl", [0]]],
+	    "desc": "Uncolonised and empty."
+	},
+	"De": {
+	    "name": "Desert",
+	    "req": [["atmo", [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], ["hydro", [0]]]],
+	    "desc": "Dry and barely habitable"
+	},
+	"Fl": {
+	    "name": "Fluid Oceans",
+	    "req": [["atmo", [10, 11, 12, 13, 14, 15]], ["hydro", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]],
+	    "desc": "Worlds where the surface liquid is something other than water, and so are incompatible with Earth-derived life."
+	},
+	"Ga": {
+	    "name": "Garden",
+	    "req": [["size", [6, 7, 8]], ["atmo", [5, 6, 8]], ["hydro", [5, 6, 7]]],
+	    "desc": "Worlds that are Earth-like."
+	},
+	"Hi": {
+	    "name": "High Population",
+	    "req": [["pop", [9, 10, 11, 12]]],
+	    "desc": "A population in the billions."
+	},
+	"Ht": {
+	    "name": "High tech",
+	    "req": [["tl", [12, 13, 14, 15]]],
+	    "desc": "Among the most technologically advanced in Charted Space."
+	},
+	"Ic": {
+	    "name": "Ice-Capped",
+	    "req": [["atmo", [0, 1]], ["hydro", [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]]],
+	    "desc": "Worlds that have most of their surface liquid frozen in polar ice caps, and are cold and dry."
+	},
+	"In": {
+	    "name": "Industrial",
+	    "req": [["atmo", [0, 1, 2, 4, 7, 9]], ["pop", [9, 10, 11, 12]]],
+	    "desc": "Dominated by factories and cities."
+	},
+	"Lo": {
+	    "name": "Low Population",
+	    "req": ["pop", [1, 2, 3]],
+	    "desc": "A population of only a few thousand or less."
+	},
+	"Lt": {
+	    "name": "Low Tech",
+	    "req": [["tl", [0, 1, 2, 3, 4, 5]]],
+	    "desc": "Pre-industrial and cannot produce advanced goods."
+	},
+	"Na": {
+	    "name": "Non-Agricultural",
+	    "req": [["atmo", [0, 1, 2, 3]], ["hydro", [0, 1, 2, 3]], ["pop", [6, 7, 8, 9, 10, 11, 12]]],
+	    "desc": "Too dry or barren to support their populations using conventional food production."
+	},
+	"NI": {
+	    "name": "Non-Industrial",
+	    "req": [["pop", [0, 1, 2, 3, 4, 5, 6]]],
+	    "desc": "Too low in population to maintain an extensive industrial base."
+	},
+	"Po": {
+	    "name": "Poor",
+	    "req": [["atmo", [2, 3, 4, 5]], ["hydro", [0, 1, 2, 3]]],
+	    "desc": "Lacking resources, viable land or sufficient population to be anything other than marginal colonies."
+	},
+	"Ri": {
+	    "name": "Rich",
+	    "req": [["atmo", [6, 8]], ["pop", [6, 7, 8]], ["gov", [4, 5, 6, 7, 8, 9]]],
+	    "desc": "Blessed with a stable government and viable biosphere, making them economic powerhouses."
+	},
+	"Va": {
+	    "name": "Vacuum",
+	    "req": [["atmo", [0]]],
+	    "desc": "No atmosphere."
+	},
+	"Wa": {
+	    "name": "Water World",
+	    "req": [["hydro", [10]]],
+	    "desc": "Almost entirely water-ocean across their surface."
+	}
+    }
+}

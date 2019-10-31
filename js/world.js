@@ -3,6 +3,12 @@
 * License: TBD
 */
 
+var worldTables;
+
+d3.json('../data/worlds.json').then(data => {
+   worldTables = data;
+});
+
 class World {
     constructor() {
 		this.props = {
@@ -42,6 +48,82 @@ class World {
 
 	get refuel() {
 		return ((this.props.hydro >= 3) || this.props.gasGiant || (parseInt(this.props.starport, 36) <= 13));
+	}
+
+	get size() {
+		console.log(this.props.size);
+		var val = this.props.size.toString(16).toUpperCase();
+		var row = worldTables['size'][val];
+		return `<b>${val}</b> &ndash; Diameter: ${row['d']}. Gravity: ${row['g']}.`;
+	}
+
+	get atmo() {
+		var val = this.props.atmo.toString(16).toUpperCase();
+		var row = worldTables['atmo'][val];
+		return `${val} &ndash; ${row['comp']}. Pressure: ${row['p']}. Required Gear: ${row['gear']}. TL requirement: ${row['tl']}.`;
+	}
+
+	get hzdm() {
+		return worldTables['hzdm'][this.props.hzdm];
+	}
+
+	get temp() {
+		var val = this.props.temp;
+		var row = worldTables['temp'][val];
+		return `${row['desc']} (${row['temp']})`;
+	}	
+
+	get hydro() {
+		var val = this.props.hydro.toString(16).toUpperCase();
+		var row = worldTables['hydro'][val];
+		return `<b>${val}</b> &ndash; ${row['percent']} (${row['desc']}).`;
+	}
+
+	get pop() {
+		var val = this.props.pop.toString(16).toUpperCase();
+		var row = worldTables['pop'][val];
+		return `<b>${val}</b> &ndash; ${row['range']} (${row['desc']}).`;
+	}
+
+	get gov() {
+		var val = this.props.gov.toString(16).toUpperCase();
+		var row = worldTables['gov'][val];
+		return `<b>${row['type']}</b> &ndash; ${row['desc']}.`;
+	}
+
+	get factions() {
+		var out = '';
+
+		this.props.factions.forEach(d => {
+			var size = worldTables['factions'][d[0]]; 
+			var row = worldTables['gov'][d[0]];
+			out += `<p><i>${size['type']}:</i> ${row['type']} (${row['desc']}).</p>`
+		});
+
+		return out;
+	}
+
+	get cultural() {
+		var val = this.props.cultural.toString();
+		var row = worldTables['cultural'][val];
+		return `<i>${val}</i> &ndash; ${row['desc']}`;
+	}
+
+	get lawlvl() {
+		var val = this.props.gov.toString();
+		return `<b>${val}</b> &ndash; see table in rulebook.`;
+	}
+
+	get tl() {
+		var val = this.props.gov.toString(16).toUpperCase();
+		var row = worldTables['tl'][val];
+		return `<b>${this.props.gov} (${row['type']})</b> &ndash; ${row['desc']}`;
+	}
+
+	get starport() {
+		var val = this.props.starport;
+		var row = worldTables['starport'][val];
+		return `<b>${val} (${row['qual']})</b> &ndash; Fuel: ${row['fuel']}. Facilities: ${row['fac']}.`;
 	}
 
     rollSize() {
@@ -404,10 +486,12 @@ function randomWorld() {
 	world.rollWorld();
 
 	document.getElementById("world").innerHTML = world.profile;
-	console.log(world.refuel);
-	console.log((world.props.hydro >= 3));
-	console.log(world.props.gasGiant);
-	console.log((parseInt(world.props.starport, 36) <= 13));
-	console.log(world.props.starport);
-
+	document.getElementById("starport").innerHTML = world.starport;
+	document.getElementById("size").innerHTML = world.size;
+	document.getElementById("atmo").innerHTML = world.atmo;
+	document.getElementById("temp").innerHTML = world.temp;
+	document.getElementById("pop").innerHTML = world.pop;
+	document.getElementById("gov").innerHTML = world.gov;
+	document.getElementById("lawlvl").innerHTML = world.lawlvl;
+	document.getElementById("tl").innerHTML = world.tl;
 }
