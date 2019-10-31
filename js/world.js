@@ -5,7 +5,7 @@
 
 var worldTables;
 
-d3.json('../data/worlds.json').then(data => {
+d3.json('data/worlds.json').then(data => {
    worldTables = data;
 });
 
