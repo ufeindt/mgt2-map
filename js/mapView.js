@@ -41,6 +41,8 @@ const tip = d3.tip()
     content += `<div><b>Government:</b> <span id="gov">${d.world.gov}</span></div>`
     content += `<div><b>Law Level:</b> <span id="lawlvl">${d.world.lawlvl}</span></div>`
     content += `<div><b>Tech Level:</b> <span id="tl">${d.world.tl}</span></div>`
+    content += `<div><b>Cultural Difference:</b> <span id="cultural">${d.world.cultural}</span></div>`
+    content += `<div><b>Trade Codes:</b> <span id="tc">${d.world.tc}</span></div>`
 
     return content;
   });
@@ -49,6 +51,13 @@ graph.call(tip);
 
 map = new Map(8, 10);
 updateMap(map);
+
+d3.json('data/worlds.json').then(data => {
+    worldTables = data;
+    map.determineTradeCodes();
+    map.determineRoutes();
+    updateMap(map);
+});
 
 function updateMap(map) {
     gridData = map.makeHexGrid();

@@ -331,7 +331,7 @@
 	},
 	"Lo": {
 	    "name": "Low Population",
-	    "req": ["pop", [1, 2, 3]],
+	    "req": [["pop", [1, 2, 3]]],
 	    "desc": "A population of only a few thousand or less."
 	},
 	"Lt": {

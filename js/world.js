@@ -5,29 +5,30 @@
 
 var worldTables;
 
-d3.json('data/worlds.json').then(data => {
-   worldTables = data;
-});
+// d3.json('data/worlds.json').then(data => {
+//    worldTables = data;
+// });
 
 class World {
     constructor() {
 		this.props = {
-			size : -1,
-			atmo : -1,
-			hzdm : -1,
-			temp : -1,
-			hydro : -1,
-			pop : -1,
-			gov : 0,
-			factions : [],
-			cultural : -1,
-			lawlvl : 0,
-			starport : -1,
-			bases : [],
-			berthing : 0,
-			tl : 0,
+			size: -1,
+			atmo: -1,
+			hzdm: -1,
+			temp: -1,
+			hydro: -1,
+			pop: -1,
+			gov: 0,
+			factions: [],
+			cultural: -1,
+			lawlvl: 0,
+			starport: -1,
+			bases: [],
+			berthing: 0,
+			tl: 0,
 			zone: 'green',
-			gasGiant: false
+			gasGiant: false,
+			tc: []
 		};
 		
 		// this.rollWorld();
@@ -105,7 +106,7 @@ class World {
 	get cultural() {
 		var val = this.props.cultural.toString();
 		var row = worldTables['cultural'][val];
-		return `<i>${val}</i> &ndash; ${row['desc']}`;
+		return `<i>${row['name']}</i> &ndash; ${row['desc']}`;
 	}
 
 	get lawlvl() {
@@ -123,6 +124,18 @@ class World {
 		var val = this.props.starport;
 		var row = worldTables['starport'][val];
 		return `<b>${val} (${row['qual']})</b> &ndash; Fuel: ${row['fuel']}. Facilities: ${row['fac']}.`;
+	}
+
+	get tc() {
+		var out = '';
+		this.props.tc.forEach(d => {
+			if (out.length > 0) {
+				out += ', ';
+			}
+			out += worldTables['tc'][d]['name'];
+		});
+
+		return out;
 	}
 
     rollSize() {
@@ -477,7 +490,22 @@ class World {
 		this.rollStarport();
 		this.rollTL();
 		this.rollGasGiant();
-    }
+	}
+	
+	determineTradeCodes() {
+		for (const [code, info] of Object.entries(worldTables['tc'])) {
+			var good = true;
+			info.req.forEach( d => {
+				if (!(d[1].includes(this.props[d[0]]))) {
+					good = false;
+				}
+			});
+
+			if (good) {
+				this.props.tc.push(code);
+			}
+		}
+	}
 }
 
 function randomWorld() {
@@ -493,4 +521,7 @@ function randomWorld() {
 	document.getElementById("gov").innerHTML = world.gov;
 	document.getElementById("lawlvl").innerHTML = world.lawlvl;
 	document.getElementById("tl").innerHTML = world.tl;
+	document.getElementById("tc").innerHTML = world.tc;
+	
+	return world;
 }

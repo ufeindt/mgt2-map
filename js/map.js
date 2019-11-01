@@ -16,7 +16,8 @@ class Map {
         };
 
         this.generateSystems();
-        this.determineRoutes();
+        this.determineJumps();
+        // this.determineRoutes();
     }
 
     generateSystems() {
@@ -200,12 +201,9 @@ class Map {
         return neighbours;
     }
 
-    determineRoutes() {
+    determineJumps() {
         this.distances = {};
         this.jumps = {};
-        this.routes = {};
-        this.routeJumps = {};
-        this.tradeRoutes = {};
 
         var coords = Object.keys(this.props.systems);
         coords.sort();
@@ -224,6 +222,11 @@ class Map {
                 }
             }    
         }
+    }
+
+    determineRoutes() {
+        this.routes = {};
+        this.routeJumps = {};
 
         Object.keys(this.distances).forEach( d => {
             var tmp = this.findPath(d);
@@ -246,10 +249,16 @@ class Map {
                     }
                 });
             });
+        }    
+    }
+
+    determineTradeCodes() {
+        for (const [coord, info] of Object.entries(this.props.systems)) {
+            info.world.determineTradeCodes();
         }
     }
 
-    findPath(route, d, prev) {
+    findPath(route, d, prev, verbose) {
         if (!d) {
             d = this.maxRouteLength;
         }
@@ -272,6 +281,7 @@ class Map {
             if (coord1 == start) {
                 if(!newPrev.includes(coord2)){
                     var newPath = `${coord2}-${goal}`;
+                    if (verbose) {console.log()};
                     if (coord2 == goal && d - dist >= 0) {
                         out.push({jumps: [jump], d: dist})
                     } 
@@ -316,6 +326,10 @@ class Map {
 
     get jumpRoutePaths() {
         var paths = [];
+
+        if (!this.routeJumps) {
+            return paths;
+        }
 
         for (const [route, info] of Object.entries(this.routeJumps)) {
             var x1 = Number(route.slice(0, 2));
