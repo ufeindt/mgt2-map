@@ -264,8 +264,6 @@ class Map {
         }
         newPrev.push(start);
 
-        //console.log('new', route, d, newPrev, out);
-
         Object.keys(this.jumps).forEach( (jump) => {
             var dist = this.jumps[jump];
             var coord1 = jump.slice(0, 4);
@@ -273,17 +271,15 @@ class Map {
             
             if (coord1 == start) {
                 if(!newPrev.includes(coord2)){
-                    //console.log('checking', jump, dist, 'coord2 prev', newPrev.includes(coord2));
+                    var newPath = `${coord2}-${goal}`;
                     if (coord2 == goal && d - dist >= 0) {
                         out.push({jumps: [jump], d: dist})
-                        //console.log('out', out);
                     } 
-                    else if (d - dist > 0) {
-                        var deeper = this.findPath(`${coord2}-${goal}`, d - dist, newPrev);
-                        //console.log('deeper', deeper);
-    
+                    else if (d - dist >= this.distances[newPath]) {
+
+                        var deeper = this.findPath(newPath, d - dist, newPrev);
+                        
                         for (var i = 0; i < deeper.length; i++) {
-                            //console.log('case 1', deeper[i], deeper[i]['jumps'], jump);
                             deeper[i].jumps.unshift(jump);
                             deeper[i].d += dist;
                             out.push(deeper[i]);
@@ -293,17 +289,14 @@ class Map {
             }
             else if (coord2 == start) {
                 if(!newPrev.includes(coord1)){
-                    //console.log('checking', jump, dist, 'coord1 prev', newPrev.includes(coord1));
+                    var newPath = `${coord1}-${goal}`;
                     if (coord1 == goal && d - dist >= 0) {
                         out.push({jumps: [jump], d: dist})
-                        //console.log('out', out);
                     }
-                    else if (d - dist > 0) {
-                        var deeper = this.findPath(`${coord1}-${goal}`, d - dist, newPrev);
-                        //console.log('deeper', deeper);
+                    else if (d - dist >= this.distances[newPath]) {
+                        var deeper = this.findPath(newPath, d - dist, newPrev);
 
                         for (var i = 0; i < deeper.length; i++) {
-                            //console.log('case 2', deeper[i], deeper[i]['jumps'], jump);
                             deeper[i].jumps.unshift(jump);
                             deeper[i].d += dist;
                             out.push(deeper[i]);
@@ -312,9 +305,6 @@ class Map {
                 }
             }
         });
-
-        // Output array [{jumps: [indices], d: distance}]
-        //console.log('end', out)
         
         var minDist = Math.min(...out.map(d => d.d));
         out = out.filter(d => (d.d == minDist));
