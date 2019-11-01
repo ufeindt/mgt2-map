@@ -1,5 +1,5 @@
 const showDistance = !true;
-const showRoutes = !true;
+const showRoutes = true;
 
 // select the svg container first
 const svg = d3.select('.canvas')

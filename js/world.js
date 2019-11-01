@@ -51,7 +51,6 @@ class World {
 	}
 
 	get size() {
-		console.log(this.props.size);
 		var val = this.props.size.toString(16).toUpperCase();
 		var row = worldTables['size'][val];
 		return `<b>${val}</b> &ndash; Diameter: ${row['d']}. Gravity: ${row['g']}.`;
@@ -223,7 +222,7 @@ class World {
 				break;
 			}
 
-			this.props.hydro = Math.max(rollDice(2, 6, dm), 0);
+			this.props.hydro = Math.min(Math.max(rollDice(2, 6, dm), 0), 10);
 
 			// console.log('Hydrographics roll: 2D + ' + dm.toString() + '. Result: ' + this.props.hydro);
 		}
