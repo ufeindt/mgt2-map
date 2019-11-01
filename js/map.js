@@ -280,13 +280,17 @@ class Map {
             
             if (coord1 == start) {
                 if(!newPrev.includes(coord2)){
-                    var newPath = `${coord2}-${goal}`;
-                    if (verbose) {console.log()};
+                    if (parseInt(coord2) < parseInt(goal)) {
+                        var newPath = `${coord2}-${goal}`;
+                    }
+                    else {
+                        var newPath = `${goal}-${coord2}`;
+                    }
+                    if (verbose) {console.log(newPath, d, dist, this.distance[newPath])};
                     if (coord2 == goal && d - dist >= 0) {
                         out.push({jumps: [jump], d: dist})
                     } 
                     else if (d - dist >= this.distances[newPath]) {
-
                         var deeper = this.findPath(newPath, d - dist, newPrev);
                         
                         for (var i = 0; i < deeper.length; i++) {
@@ -299,6 +303,12 @@ class Map {
             }
             else if (coord2 == start) {
                 if(!newPrev.includes(coord1)){
+                    if (parseInt(coord1) < parseInt(goal)) {
+                        var newPath = `${coord1}-${goal}`;
+                    }
+                    else {
+                        var newPath = `${goal}-${coord1}`;
+                    }
                     var newPath = `${coord1}-${goal}`;
                     if (coord1 == goal && d - dist >= 0) {
                         out.push({jumps: [jump], d: dist})

@@ -104,9 +104,14 @@ class World {
 	}
 
 	get cultural() {
-		var val = this.props.cultural.toString();
-		var row = worldTables['cultural'][val];
-		return `<i>${row['name']}</i> &ndash; ${row['desc']}`;
+		if (this.props.cultural == -1) {
+			return 'None (uninhabited).'
+		}
+		else {
+			var val = this.props.cultural.toString();
+			var row = worldTables['cultural'][val];
+			return `<i>${row['name']}</i> &ndash; ${row['desc']}`;
+		}
 	}
 
 	get lawlvl() {

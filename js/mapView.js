@@ -105,8 +105,10 @@ function updateMap(map) {
             .attr('class', 'jump-route')
             .attr('stroke', d => colourDist(d.distance))
             .attr('stroke-width', 5)
-            .attr('stroke-opacity', 0.5)
-            .attr('d', d => d.d);
+            .attr('d', d => d.d)
+            .attr('stroke-opacity', 0)
+            .transition().duration(500)
+            .attr('stroke-opacity', 0.5);
     }
 
     const planetLabels = graph.selectAll('text.planet-labels')
