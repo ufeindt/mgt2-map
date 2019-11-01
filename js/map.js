@@ -241,8 +241,8 @@ class Map {
                             connecting: [route]
                         };
                     }
-                    else {
-                        this.routeJumps[d].connecting.push(route)
+                    else if (!this.routeJumps[d].connecting.includes(route)) {
+                        this.routeJumps[d].connecting.push(route);
                     }
                 });
             });
