@@ -27,7 +27,7 @@ const colourDist = d3.scaleOrdinal(d3["schemeSet2"])
 
 //});
 
-const tip = d3.tip()
+const tipSystem = d3.tip()
   .attr('class', 'd3-tip')
   .direction('se')
   .html(d => {
@@ -47,7 +47,31 @@ const tip = d3.tip()
     return content;
   });
 
-graph.call(tip);
+graph.call(tipSystem);
+
+const tipRoute = d3.tip()
+  .attr('class', 'd3-tip')
+  .direction('se')
+  .html(d => {
+    let content = '<div><b><u>Trade Routes:</u></b></div>';
+    for (const [tr, reasons] of Object.entries(d.tradePartners)) {
+        content += `<div><b>${tr.slice(0,4)}&ndash;${tr.slice(5,9)}</b></div>`;
+        content += `<div>`;
+        reasons.forEach(reason => {
+            reason.forEach(r => {
+                content += `${r}, `;
+            });
+            content = content.slice(0, -2);
+            content += ' &harr; ';
+        });
+        content = content.slice(0, -8);
+        content += `</div>`;
+    }
+
+    return content;
+    })
+
+graph.call(tipRoute);
 
 map = new Map(8, 10);
 updateMap(map);
@@ -55,7 +79,9 @@ updateMap(map);
 d3.json('data/worlds.json').then(data => {
     worldTables = data;
     map.determineTradeCodes();
+    map.determineTradePartners();
     map.determineRoutes();
+    graph.selectAll('*').remove()
     updateMap(map);
 });
 
@@ -186,6 +212,7 @@ function updateMap(map) {
         .attr('stroke', '#000')
         .attr('stroke-width', 1)
         .attr('fill', '#fff')
+        .attr('fill-opacity', 0)
         .attr('cx', d => d.gasGiantX)
         .attr('cy', d => d.gasGiantY)
         .attr('rx', 8)
@@ -219,10 +246,23 @@ function updateMap(map) {
         graph.selectAll('.grid-hex')
             .on('mouseover', (d, i, n) => {
                 if ('world' in d) {
-                    tip.show(d, n[i]);   
+                    tipSystem.show(d, n[i]);   
                 }
             })
-            .on('mouseout', d => tip.hide());
+            .on('mouseout', d => tipSystem.hide());
+    }
+
+    if (map.routeMode == 'trade') {
+        graph.selectAll('.jump-route')
+        .on('mouseover', (d, i, n) => {
+            tipRoute.show(d, n[i]);
+            handleRouteMouseOver(d, i, n);
+
+        })
+        .on('mouseout', (d, i, n) => {
+            tipRoute.hide();
+            handleRouteMouseOut(d, i, n);
+        });
     }
 }
 
@@ -249,4 +289,16 @@ const handleHexMouseOutDistance = (d,i,n) => {
                 .attr('fill', '#fff');
         }
     });
+};
+
+const handleRouteMouseOver = (d, i, n) => {
+    d3.select(n[i])
+        .transition('changeRouteOpacity').duration(100)
+        .attr('stroke-opacity', 1);
+};
+  
+const handleRouteMouseOut = (d,i,n) => {
+    d3.select(n[i])
+        .transition('changeRouteOpacity').duration(100)
+        .attr('stroke-opacity', 0.5);
 };

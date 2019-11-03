@@ -9,6 +9,7 @@ class Map {
         this.hexSideLength = 50;
         this.maxRouteLength = 4;
         this.maxJump = 2;
+        this.routeMode = 'trade';
 
         this.colours = {
             'wet': '#00bfff',
@@ -203,32 +204,53 @@ class Map {
 
     determineJumps() {
         this.distances = {};
-        this.jumps = {};
+        this.offGridJumps = {};
 
         var coords = Object.keys(this.props.systems);
         coords.sort();
 
+        var offGrid = [];
         for (var i = 0; i < coords.length; i++) {
             var neighbours = this.hexagonNeighbours(coords[i], this.maxRouteLength);
             for (var j = i + 1; j < coords.length; j++) {
                 if (coords[j] in neighbours) {
                     this.distances[`${coords[i]}-${coords[j]}`] = neighbours[coords[j]];
-
-                    if (this.props.systems[coords[i]].world.refuel && 
-                        this.props.systems[coords[j]].world.refuel &&
-                        neighbours[coords[j]] <= this.maxJump) {
-                        this.jumps[`${coords[i]}-${coords[j]}`] = neighbours[coords[j]];
-                    }
                 }
-            }    
+            }
+
+            if (!this.props.systems[coords[i]].world.refuel) {
+                offGrid.push(coords[i]);
+            }
         }
+
+        offGrid.forEach(coord => {
+            var tmp = {};
+            for (const [route, dist] of Object.entries(this.distances)) {
+                var coord1 = route.slice(0, 4);
+                var coord2 = route.slice(5, 9);
+                if (coord1 == coord || coord2 == coord) {
+                    tmp[route] = dist;
+                }
+
+                for (const [r, d] of Object.entries(tmp)) {
+                    this.offGridJumps[r] = d + Math.min(...Object.values(tmp));
+                }
+            }
+        });
     }
 
-    determineRoutes() {
+    determineRoutes(all) {
         this.routes = {};
         this.routeJumps = {};
 
-        Object.keys(this.distances).forEach( d => {
+        if (this.routeMode == 'all') {
+            var routes = Object.keys(this.distances);
+        } 
+        else {
+            var routes = Object.keys(this.tradePartners);
+        }
+        
+        routes.forEach( d => {
             var tmp = this.findPath(d);
             if (tmp.length > 0) {
                 this.routes[d] = tmp;
@@ -240,7 +262,7 @@ class Map {
                 info_.jumps.forEach(d => {
                     if (!(d in this.routeJumps)) {
                         this.routeJumps[d] = {
-                            d: this.jumps[d],
+                            d: this.distances[d],
                             connecting: [route]
                         };
                     }
@@ -258,7 +280,65 @@ class Map {
         }
     }
 
-    findPath(route, d, prev, verbose) {
+    determineTradePartners() {
+        const tradeReasons = [
+            [['In', 'Ht'], ['As', 'De', 'Ic', 'NI']],
+            [['Hi', 'Ri'], ['Ag', 'Ga', 'Wa']]
+        ];
+
+        this.tradePartners = {};  
+
+        Object.keys(this.distances).forEach(route => {
+            var coord1 = route.slice(0, 4);
+            var coord2 = route.slice(5, 9);
+            
+            var tc1 = this.props.systems[coord1].world.props.tc;
+            var tc2 = this.props.systems[coord2].world.props.tc;
+
+            var tradeConnections = [[], []];
+
+            tradeReasons.forEach(reason => {
+                var tmp = [[], []];
+                reason[0].forEach(code => {
+                    if (tc1.includes(code)) {
+                        tmp[0].push(code);
+                    }
+                });  
+                reason[1].forEach(code => {
+                    if (tc2.includes(code)) {
+                        tmp[1].push(code);
+                    }
+                });
+                if (tmp[0].length > 0 && tmp[1].length > 0) {
+                    tradeConnections[0].push(...tmp[0]);
+                    tradeConnections[1].push(...tmp[1]);
+                }  
+            
+                tmp = [[], []];
+                reason[1].forEach(code => {
+                    if (tc1.includes(code)) {
+                        tmp[0].push(code);
+                    }
+                });  
+                reason[0].forEach(code => {
+                    if (tc2.includes(code)) {
+                        tmp[1].push(code);
+                    }
+                });
+                if (tmp[0].length > 0 && tmp[1].length > 0) {
+                    tradeConnections[0].push(...tmp[0]);
+                    tradeConnections[1].push(...tmp[1]);
+                }  
+            });
+
+
+            if (tradeConnections[0].length > 0 && tradeConnections[1].length > 0) {
+                this.tradePartners[route] = tradeConnections;
+            }
+        });
+    }
+
+    findPath(route, d, prev) {
         if (!d) {
             d = this.maxRouteLength;
         }
@@ -273,58 +353,58 @@ class Map {
         }
         newPrev.push(start);
 
-        Object.keys(this.jumps).forEach( (jump) => {
-            var dist = this.jumps[jump];
-            var coord1 = jump.slice(0, 4);
-            var coord2 = jump.slice(5, 9);
-            
-            if (coord1 == start) {
-                if(!newPrev.includes(coord2)){
-                    if (parseInt(coord2) < parseInt(goal)) {
-                        var newPath = `${coord2}-${goal}`;
-                    }
-                    else {
-                        var newPath = `${goal}-${coord2}`;
-                    }
-                    if (verbose) {console.log(newPath, d, dist, this.distance[newPath])};
-                    if (coord2 == goal && d - dist >= 0) {
-                        out.push({jumps: [jump], d: dist})
-                    } 
-                    else if (d - dist >= this.distances[newPath]) {
-                        var deeper = this.findPath(newPath, d - dist, newPrev);
-                        
-                        for (var i = 0; i < deeper.length; i++) {
-                            deeper[i].jumps.unshift(jump);
-                            deeper[i].d += dist;
-                            out.push(deeper[i]);
+        for (const [jump, dist] of Object.entries(this.distances)) {
+            if (dist <= this.maxJump) {
+                var coord1 = jump.slice(0, 4);
+                var coord2 = jump.slice(5, 9);
+                
+                if (coord1 == start) {
+                    if(!newPrev.includes(coord2)){
+                        if (parseInt(coord2) < parseInt(goal)) {
+                            var newPath = `${coord2}-${goal}`;
                         }
-                    }
-                } 
-            }
-            else if (coord2 == start) {
-                if(!newPrev.includes(coord1)){
-                    if (parseInt(coord1) < parseInt(goal)) {
+                        else {
+                            var newPath = `${goal}-${coord2}`;
+                        }
+                        if (coord2 == goal && d - dist >= 0) {
+                            out.push({jumps: [jump], d: dist})
+                        } 
+                        else if (d - dist >= this.distances[newPath]) {
+                            var deeper = this.findPath(newPath, d - dist, newPrev);
+                            
+                            for (var i = 0; i < deeper.length; i++) {
+                                deeper[i].jumps.unshift(jump);
+                                deeper[i].d += dist;
+                                out.push(deeper[i]);
+                            }
+                        }
+                    } 
+                }
+                else if (coord2 == start) {
+                    if(!newPrev.includes(coord1)){
+                        if (parseInt(coord1) < parseInt(goal)) {
+                            var newPath = `${coord1}-${goal}`;
+                        }
+                        else {
+                            var newPath = `${goal}-${coord1}`;
+                        }
                         var newPath = `${coord1}-${goal}`;
-                    }
-                    else {
-                        var newPath = `${goal}-${coord1}`;
-                    }
-                    var newPath = `${coord1}-${goal}`;
-                    if (coord1 == goal && d - dist >= 0) {
-                        out.push({jumps: [jump], d: dist})
-                    }
-                    else if (d - dist >= this.distances[newPath]) {
-                        var deeper = this.findPath(newPath, d - dist, newPrev);
+                        if (coord1 == goal && d - dist >= 0) {
+                            out.push({jumps: [jump], d: dist})
+                        }
+                        else if (d - dist >= this.distances[newPath]) {
+                            var deeper = this.findPath(newPath, d - dist, newPrev);
 
-                        for (var i = 0; i < deeper.length; i++) {
-                            deeper[i].jumps.unshift(jump);
-                            deeper[i].d += dist;
-                            out.push(deeper[i]);
+                            for (var i = 0; i < deeper.length; i++) {
+                                deeper[i].jumps.unshift(jump);
+                                deeper[i].d += dist;
+                                out.push(deeper[i]);
+                            }
                         }
                     }
                 }
             }
-        });
+        }
         
         var minDist = Math.min(...out.map(d => d.d));
         out = out.filter(d => (d.d == minDist));
@@ -349,11 +429,27 @@ class Map {
 
             var d = `M${this.hexagonCentreX(x1, y1)} ${this.hexagonCentreY(x1, y1)}`;
             d += `L${this.hexagonCentreX(x2, y2)} ${this.hexagonCentreY(x2, y2)}`;
-            paths.push({
+            var newPath = {
                 d: d,
                 distance: info.d,
                 name: route 
-            });
+            }
+
+            if (this.routeMode == 'trade') {
+                newPath.tradePartners = {};
+                info.connecting.forEach(d => {
+                    newPath.tradePartners[d] = [this.tradePartners[d][0].map(tc => worldTables.tc[tc].name),
+                                                this.tradePartners[d][1].map(tc => worldTables.tc[tc].name)];
+                });
+            }
+
+            if (route in this.offGridJumps) {
+                newPath.distance = this.offGridJumps[route];
+            }
+
+            if (newPath.distance <= this.maxJump) {
+                paths.push(newPath);
+            } 
         }
 
         return paths;
