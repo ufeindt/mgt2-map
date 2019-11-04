@@ -1,12 +1,13 @@
 const showDistance = !true;
 const showRoutes = true;
 const subsectors = [2, 2]
-
+const subsectorDim = [8, 10]
+;
 // select the svg container first
 const svg = d3.select('.canvas')
     .append('svg')
-        .attr('width', 600*subsectors[0]+3)
-        .attr('height', (500*subsectors[1]+50)*Math.sqrt(3)+3);
+        .attr('width', 75*subsectorDim[0]*subsectors[0]+3)
+        .attr('height', (50*subsectorDim[1]*subsectors[1]+50)*Math.sqrt(3)+3);
 
 // create margins & dimensions
 const margin = {top: 1.5, right: 1.5, bottom: 1.5, left: 1.5};
@@ -74,7 +75,11 @@ const tipRoute = d3.tip()
 
 graph.call(tipRoute);
 
-map = new Map(subsectors);
+map = new Map(subsectors, subsectorDim);
+updateMap(map);
+map.rollSystemLocations();
+map.generateSystems();
+map.determineJumps();
 updateMap(map);
 
 d3.json('data/worlds.json').then(data => {
@@ -87,27 +92,7 @@ d3.json('data/worlds.json').then(data => {
 });
 
 function updateMap(map) {
-    frameData = map.makeHexFrame();
-
-    const frameRects = graph.selectAll('rect.grid-frame')
-        .data(frameData);
-
-    frameRects.exit()
-        .remove();
-
-    frameRects .enter()
-        .append('rect')
-        .attr('class', 'grid-frame')
-        .attr('stroke', '#000')
-        .attr('fill', '#fff')
-        .attr('fill-opacity', 0)
-        .attr('stroke-width', 3)
-        .attr('x', d => d.x)
-        .attr('y', d => d.y)
-        .attr('width', d => d.width)
-        .attr('height', d => d.height);
-
-    gridData = map.makeHexGrid();
+     gridData = map.makeHexGrid();
 
     const gridPaths = graph.selectAll('path')
         .data(gridData);
@@ -158,6 +143,26 @@ function updateMap(map) {
             .transition().duration(500)
             .attr('stroke-opacity', 0.5);
     }
+
+    frameData = map.makeHexFrame();
+
+    const frameRects = graph.selectAll('rect.grid-frame')
+        .data(frameData);
+
+    frameRects.exit()
+        .remove();
+
+    frameRects .enter()
+        .append('line')
+        .attr('class', 'grid-frame')
+        .attr('stroke', '#000')
+        //.attr('fill', '#fff')
+        // .attr('fill-opacity', 0)
+        .attr('stroke-width', 3)
+        .attr('x1', d => d.x1)
+        .attr('y1', d => d.y1)
+        .attr('x2', d => d.x2)
+        .attr('y2', d => d.y2);
 
     const planetLabels = graph.selectAll('text.planet-labels')
         .data(Object.values(map.props.systems));
@@ -255,36 +260,38 @@ function updateMap(map) {
         .attr('cy', d => d.gasGiantY)
         .attr('r', 4);
 
-    if (showDistance) {
-        // add events
-        graph.selectAll('.grid-hex')
+    if (worldTables) {
+        if (showDistance) {
+            // add events
+            graph.selectAll('.grid-hex')
+                .on('mouseover', (d, i, n) => {
+                    handleHexMouseOverDistance(d, i, n);
+                })
+                .on('mouseout', (d, i, n) => {
+                    handleHexMouseOutDistance(d, i, n);
+                });
+        } else {
+            graph.selectAll('.grid-hex')
+                .on('mouseover', (d, i, n) => {
+                    if ('world' in d) {
+                        tipSystem.show(d, n[i]);   
+                    }
+                })
+                .on('mouseout', d => tipSystem.hide());
+        }
+
+        if (map.routeMode == 'trade') {
+            graph.selectAll('.jump-route')
             .on('mouseover', (d, i, n) => {
-                handleHexMouseOverDistance(d, i, n);
+                tipRoute.show(d, n[i]);
+                handleRouteMouseOver(d, i, n);
+
             })
             .on('mouseout', (d, i, n) => {
-                handleHexMouseOutDistance(d, i, n);
+                tipRoute.hide();
+                handleRouteMouseOut(d, i, n);
             });
-    } else {
-        graph.selectAll('.grid-hex')
-            .on('mouseover', (d, i, n) => {
-                if ('world' in d) {
-                    tipSystem.show(d, n[i]);   
-                }
-            })
-            .on('mouseout', d => tipSystem.hide());
-    }
-
-    if (map.routeMode == 'trade') {
-        graph.selectAll('.jump-route')
-        .on('mouseover', (d, i, n) => {
-            tipRoute.show(d, n[i]);
-            handleRouteMouseOver(d, i, n);
-
-        })
-        .on('mouseout', (d, i, n) => {
-            tipRoute.hide();
-            handleRouteMouseOut(d, i, n);
-        });
+        }
     }
 }
 

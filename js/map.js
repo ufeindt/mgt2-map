@@ -1,10 +1,19 @@
 class Map {
-    constructor(subsectors) {
-        this.subsectorDim = [8, 10];
+    constructor(subsectors, subsectorDim) {
+        if (!subsectorDim) {
+            this.subsectorDim = [8, 10];
+        } 
+        else {
+            this.subsectorDim = subsectorDim;
+        }
+
         this.hexSideLength = 50;
         this.maxRouteLength = 4;
         this.maxJump = 2;
         this.routeMode = 'trade';
+        // this.systemPlacement = 'default';
+        this.systemPlacement = 'grouped';
+        // this.systemPlacement = 'rolled';
 
         this.colours = {
             'wet': '#00bfff',
@@ -18,16 +27,70 @@ class Map {
             systems: {}
         }
 
-        this.generateSystems();
-        this.determineJumps();
+        // this.rollSystemLocations();
+        // this.generateSystems();
+        // this.determineJumps();
         // this.determineRoutes();
+    }
+
+    rollSystemLocations() {
+        this.systemLocations = []
+
+        var coords = [];
+        for (var x = 1; x <= this.props.width; x++) {
+            for (var y = 1; y <= this.props.height; y++) {
+                coords.push(padToTwo(x) + padToTwo(y));
+            }
+        }
+        
+        if (this.systemPlacement == 'default') {
+            coords.forEach(c => {
+                if (rollDie(6) >= 4) {
+                    this.systemLocations.push(c);
+                }
+            });
+        }
+        else if (this.systemPlacement == 'grouped') {
+            while (coords.length > 0) {
+                var coord = coords.splice(Math.floor(Math.random()*coords.length), 1)[0];             
+                const weights = [0.2, 0.01, 0.08];
+                var prop = 1;
+                
+                var neighbours = this.hexagonNeighbours(coord, 3);
+                for (var k = 0; k < 3; k++) {
+                    prop -= weights[k]*Object.entries(neighbours).filter((n, d) => this.systemLocations.includes(n[0]) && n[1] == k+1).length;
+                }
+
+                if (Math.random() < prop) {
+                    this.systemLocations.push(coord);
+                }
+            }
+        }
+        else if (this.systemPlacement == 'rolled') {
+            while (coords.length > 0) {
+                var coord = coords.splice(Math.floor(Math.random()*coords.length), 1)[0];
+                const weights = [5, 1, 3];
+                var dc = 72;
+                
+                var neighbours = this.hexagonNeighbours(coord, 3);
+                for (var k = 0; k < 3; k++) {
+                    dc -= weights[k]*Object.entries(neighbours).filter((n, d) => this.systemLocations.includes(n[0]) && n[1] == k+1).length;
+                }
+
+                if (rollDice(12, 6, 0) <= dc) {
+                    this.systemLocations.push(coord);
+                }
+            }
+        }
+
+        this.systemLocations.sort();
     }
 
     generateSystems() {
         for (var x = 1; x <= this.props.width; x++) {
             for (var y = 1; y <= this.props.height; y++) {
-                if (rollDie(6) >= 4) {
-                    var coord = padToTwo(x) + padToTwo(y);
+                var coord = padToTwo(x) + padToTwo(y);
+                if (this.systemLocations.includes(coord)) {
                     var centX = this.hexagonCentreX(x, y);
                     var centY = this.hexagonCentreY(x, y);
 
@@ -130,21 +193,31 @@ class Map {
     makeHexFrame() {
         var out = [];
 
-        for (var x = 0; x < this.props.subsectors[0]; x++) {
-            for (var y = 0; y < this.props.subsectors[0]; y++) {
-                var tmp = {
-                    x: 12*x*this.hexSideLength,
-                    y: 20*y*Math.sqrt(3)/2*this.hexSideLength,
-                    width: 12*this.hexSideLength,
-                    height: 20*Math.sqrt(3)/2*this.hexSideLength
-                };
-
-                if (y == this.props.subsectors[1]-1) {
-                    tmp.height += Math.sqrt(3)/2*this.hexSideLength;
-                }
-
-                out.push(tmp);
+        for (var x = 0; x <= this.props.subsectors[0]; x++) {
+            var tmp = {
+                x1: 1.5*this.subsectorDim[0]*x*this.hexSideLength,
+                y1: -2,
+                x2: 1.5*this.subsectorDim[0]*x*this.hexSideLength,
+                y2: (2*this.subsectorDim[1]*this.props.subsectors[1]+1)*Math.sqrt(3)/2*this.hexSideLength+2
             }
+
+            out.push(tmp);
+        };
+
+        for (var y = 0; y <= this.props.subsectors[0]; y++) {
+            var tmp = {
+                x1: -2,
+                y1: 2*this.subsectorDim[1]*y*Math.sqrt(3)/2*this.hexSideLength,
+                x2: 1.5*this.subsectorDim[0]*this.props.subsectors[0]*this.hexSideLength+2,
+                y2: 2*this.subsectorDim[1]*y*Math.sqrt(3)/2*this.hexSideLength,
+            };
+
+            if (y == this.props.subsectors[1]) {
+                tmp.y1 += Math.sqrt(3)/2*this.hexSideLength;
+                tmp.y2 += Math.sqrt(3)/2*this.hexSideLength;
+            }
+
+            out.push(tmp);
         }
 
         return out;
