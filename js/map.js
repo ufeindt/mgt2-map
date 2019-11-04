@@ -53,12 +53,13 @@ class Map {
         else if (this.systemPlacement == 'grouped') {
             while (coords.length > 0) {
                 var coord = coords.splice(Math.floor(Math.random()*coords.length), 1)[0];             
-                const weights = [0.2, 0.01, 0.08];
+                const weights = [0.15, 0.01, 0.08, 0.08];
                 var prop = 1;
                 
-                var neighbours = this.hexagonNeighbours(coord, 3);
-                for (var k = 0; k < 3; k++) {
-                    prop -= weights[k]*Object.entries(neighbours).filter((n, d) => this.systemLocations.includes(n[0]) && n[1] == k+1).length;
+                var neighbours = this.hexagonNeighbours(coord, weights.length);
+                for (var k = 0; k < weights.length; k++) {
+                    var mod = weights[k]/Object.values(neighbours).filter(n => n == k+1).length*6*(k+1);
+                    prop -= mod*Object.entries(neighbours).filter((n, d) => this.systemLocations.includes(n[0]) && n[1] == k+1).length;
                 }
 
                 if (Math.random() < prop) {
@@ -72,9 +73,10 @@ class Map {
                 const weights = [5, 1, 3];
                 var dc = 72;
                 
-                var neighbours = this.hexagonNeighbours(coord, 3);
-                for (var k = 0; k < 3; k++) {
-                    dc -= weights[k]*Object.entries(neighbours).filter((n, d) => this.systemLocations.includes(n[0]) && n[1] == k+1).length;
+                var neighbours = this.hexagonNeighbours(coord, weights.length);
+                for (var k = 0; k < weights.length; k++) {
+                    var mod = weights[k]/Object.values(neighbours).filter(n => n == k+1).length*6*(k+1);
+                    dc -= mod*Object.entries(neighbours).filter((n, d) => this.systemLocations.includes(n[0]) && n[1] == k+1).length;
                 }
 
                 if (rollDice(12, 6, 0) <= dc) {
