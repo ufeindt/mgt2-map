@@ -1,14 +1,15 @@
 const showDistance = !true;
 const showRoutes = true;
+const subsectors = [2, 2]
 
 // select the svg container first
 const svg = d3.select('.canvas')
     .append('svg')
-        .attr('width', 1000)
-        .attr('height', 1200);
+        .attr('width', 600*subsectors[0]+3)
+        .attr('height', (500*subsectors[1]+50)*Math.sqrt(3)+3);
 
 // create margins & dimensions
-const margin = {top: 0, right: 20, bottom: 20, left: 20};
+const margin = {top: 1.5, right: 1.5, bottom: 1.5, left: 1.5};
 const graphWidth = 600 - margin.left - margin.right;
 const graphHeight = 600 - margin.top - margin.bottom;
 
@@ -28,7 +29,7 @@ const colourDist = d3.scaleOrdinal(d3["schemeSet2"])
 //});
 
 const tipSystem = d3.tip()
-  .attr('class', 'd3-tip')
+  .attr('class', 'd3-tip system-tip')
   .direction('se')
   .html(d => {
     let content = '<div><b><u>System Summary</u></b></div>';
@@ -50,7 +51,7 @@ const tipSystem = d3.tip()
 graph.call(tipSystem);
 
 const tipRoute = d3.tip()
-  .attr('class', 'd3-tip')
+  .attr('class', 'd3-tip route-tip')
   .direction('se')
   .html(d => {
     let content = '<div><b><u>Trade Routes:</u></b></div>';
@@ -73,7 +74,7 @@ const tipRoute = d3.tip()
 
 graph.call(tipRoute);
 
-map = new Map(8, 10);
+map = new Map(subsectors);
 updateMap(map);
 
 d3.json('data/worlds.json').then(data => {
@@ -86,6 +87,26 @@ d3.json('data/worlds.json').then(data => {
 });
 
 function updateMap(map) {
+    frameData = map.makeHexFrame();
+
+    const frameRects = graph.selectAll('rect.grid-frame')
+        .data(frameData);
+
+    frameRects.exit()
+        .remove();
+
+    frameRects .enter()
+        .append('rect')
+        .attr('class', 'grid-frame')
+        .attr('stroke', '#000')
+        .attr('fill', '#fff')
+        .attr('fill-opacity', 0)
+        .attr('stroke-width', 3)
+        .attr('x', d => d.x)
+        .attr('y', d => d.y)
+        .attr('width', d => d.width)
+        .attr('height', d => d.height);
+
     gridData = map.makeHexGrid();
 
     const gridPaths = graph.selectAll('path')
@@ -97,8 +118,9 @@ function updateMap(map) {
     gridPaths.enter()
         .append('path')
         .attr('class', 'grid-hex')
-        .attr('stroke', '#000')
+        .attr('stroke', '#888')
         .attr('fill', '#fff')
+        .attr('fill-opacity', 0)
         .attr('stroke-width', 2)
         .attr('d', d => d.d);
 

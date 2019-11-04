@@ -1,11 +1,6 @@
 class Map {
-    constructor(width, height) {
-        this.props = {
-            width: width,
-            height: height,
-            systems: {}
-        }
-
+    constructor(subsectors) {
+        this.subsectorDim = [8, 10];
         this.hexSideLength = 50;
         this.maxRouteLength = 4;
         this.maxJump = 2;
@@ -15,6 +10,13 @@ class Map {
             'wet': '#00bfff',
             'dry': '#b36b00'
         };
+        
+        this.props = {
+            subsectors: subsectors,
+            width: this.subsectorDim[0]*subsectors[0],
+            height: this.subsectorDim[1]*subsectors[1],
+            systems: {}
+        }
 
         this.generateSystems();
         this.determineJumps();
@@ -118,11 +120,34 @@ class Map {
     }
 
     hexagonCentreX(x, y) {
-        return (1.5*(x-1) + 1) * this.hexSideLength;
+        return (1.5*(x-1) + 0.75) * this.hexSideLength;
     }
 
     hexagonCentreY(x, y) {
-        return (2*y + (x-1)%2) * Math.sqrt(3)/2*this.hexSideLength;
+        return (2*y + (x-1)%2 - 1) * Math.sqrt(3)/2*this.hexSideLength;
+    }
+
+    makeHexFrame() {
+        var out = [];
+
+        for (var x = 0; x < this.props.subsectors[0]; x++) {
+            for (var y = 0; y < this.props.subsectors[0]; y++) {
+                var tmp = {
+                    x: 12*x*this.hexSideLength,
+                    y: 20*y*Math.sqrt(3)/2*this.hexSideLength,
+                    width: 12*this.hexSideLength,
+                    height: 20*Math.sqrt(3)/2*this.hexSideLength
+                };
+
+                if (y == this.props.subsectors[1]-1) {
+                    tmp.height += Math.sqrt(3)/2*this.hexSideLength;
+                }
+
+                out.push(tmp);
+            }
+        }
+
+        return out;
     }
 
     makeHexGrid() {
