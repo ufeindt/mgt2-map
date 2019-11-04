@@ -379,7 +379,12 @@ class Map {
         newPrev.push(start);
 
         for (const [jump, dist] of Object.entries(this.distances)) {
-            if (dist <= this.maxJump) {
+            var offGridDist = dist;
+            if (jump in this.offGridJumps) {
+                offGridDist = this.offGridJumps[jump];
+            }
+
+            if (dist <= this.maxJump && offGridDist <= this.maxJump) {
                 var coord1 = jump.slice(0, 4);
                 var coord2 = jump.slice(5, 9);
                 
